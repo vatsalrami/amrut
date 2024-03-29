@@ -14,7 +14,7 @@ function sendSms(to, body) {
       from: process.env.TWILIO_PHONE_NUMBER,
       body: body,
     })
-    .then((message) => console.log(`Message sent: $(message.sid)`))
+    .then((message) => console.log(`Message sent: ${message.sid}`))
     .catch((error) => console.error(error));
 }
 

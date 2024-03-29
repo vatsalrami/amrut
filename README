@@ -1,0 +1,6 @@
+node src/server.js
+
+ngrok http 3000
+put ngrok link as twilio webhook
+
+http://localhost:3000

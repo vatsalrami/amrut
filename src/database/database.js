@@ -1,10 +1,9 @@
 const db = require("./firebase.js");
 
-function createUser(firstName, lastName, phoneNumber) {
+function createUser(firstName, phoneNumber) {
   const userRef = db.collection("users");
   return userRef.add({
     firstName: firstName,
-    lastName: lastName,
     phoneNumber: phoneNumber,
   });
 }
