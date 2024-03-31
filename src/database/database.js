@@ -20,14 +20,30 @@ function getUser(userId) {
   });
 }
 
-function updateUser(userId, updatedInfo) {
-  const userRef = db.collection("users").doc(userId);
-  return userRef.set(updatedInfo);
+function getAllPhoneNumbers() {
+  return db
+    .collection("users")
+    .get()
+    .then((snapshot) => {
+      const numbers = [];
+      snapshot.forEach((doc) => {
+        numbers.push(doc.data().phoneNumber);
+      });
+      return numbers;
+    })
+    .catch((error) => {
+      console.error("Error getting user phone numbers: ", error);
+      return Promise.reject(error);
+    });
 }
 
-function deleteUser(userId) {
-  const userRef = db.collection("users").doc(userId);
-  return userRef.delete();
+function updateNote(userId, noteId, updatedContent) {
+  const notesRef = db
+    .collection("users")
+    .doc(userId)
+    .collection("notes")
+    .doc(noteId);
+  return notesRef.set(updatedContent);
 }
 
 function createNote(userId, date, message) {
@@ -37,6 +53,18 @@ function createNote(userId, date, message) {
     message: message,
   });
 }
+
+module.exports = { createUser, getAllPhoneNumbers };
+
+// function updateUser(userId, updatedInfo) {
+//   const userRef = db.collection("users").doc(userId);
+//   return userRef.set(updatedInfo);
+// }
+
+// function deleteUser(userId) {
+//   const userRef = db.collection("users").doc(userId);
+//   return userRef.delete();
+// }
 
 // function getNote(userId, date){
 //     const notesRef = db.collection('users').doc(userId).collection('notes');
@@ -51,22 +79,11 @@ function createNote(userId, date, message) {
 //     });
 // }
 
-function updateNote(userId, noteId, updatedContent) {
-  const notesRef = db
-    .collection("users")
-    .doc(userId)
-    .collection("notes")
-    .doc(noteId);
-  return notesRef.set(updatedContent);
-}
-
-function deleteNote(userId, noteId) {
-  const notesRef = db
-    .collection("users")
-    .doc(userId)
-    .collection("notes")
-    .doc(noteId);
-  return notesRef.delete();
-}
-
-module.exports = { createUser };
+// function deleteNote(userId, noteId) {
+//   const notesRef = db
+//     .collection("users")
+//     .doc(userId)
+//     .collection("notes")
+//     .doc(noteId);
+//   return notesRef.delete();
+// }

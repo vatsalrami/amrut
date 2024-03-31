@@ -1,4 +1,4 @@
-const { createUser } = require("../database/database");
+const db = require("../database/database");
 
 function processIncomingSms(messageBody, fromNumber) {
   if (messageBody.startsWith("@")) {
@@ -10,7 +10,7 @@ function processIncomingSms(messageBody, fromNumber) {
 
 function signupName(messageBody, fromNumber) {
   const name = messageBody.substring(1).trim();
-  return createUser(name, fromNumber)
+  return db.createUser(name, fromNumber)
     .then(() => {
       return `Thank you, ${name}. Signup Successful!`;
     })
@@ -20,4 +20,4 @@ function signupName(messageBody, fromNumber) {
     });
 }
 
-module.exports = processIncomingSms;
+module.exports = {processIncomingSms};

@@ -1,8 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-//const { createUser } = require("./database/database");
-const sendSms = require("./sms/sendSms");
-const processIncomingSms = require("./sms/incoming");
+const db = require("./database/database");
+const smsIncoming = require("./sms/incoming");
+const smsOutgoing = require("./sms/outgoing");
 const twilio = require("twilio");
 const app = express();
 const port = 3000;
@@ -23,7 +23,7 @@ app.post("/submitPhoneNumber", (req, res) => {
   if (!phoneNumber) {
     res.status(400).send("Phone number is required.");
   }
-  sendSms(
+  smsOutgoing.sendSms(
     phoneNumber,
     "Welcome to Amrut.\n\n To finish signing up, please reply with '@' followed by your first name. Ex. (@Vatsal)"
   );
@@ -37,10 +37,18 @@ app.post("/sms/webhook", (req, res) => {
 
   console.log(`Incoming message from ${fromNumber}: ${messageBody}`);
 
-  processIncomingSms(messageBody, fromNumber).then((responseMessage) => {
-    const twiml = new MessagingResponse();
-    twiml.message(responseMessage);
-    res.writeHead(200, { "Content-Type": "text/xml" });
-    res.end(twiml.toString());
-  });
+  smsIncoming
+    .processIncomingSms(messageBody, fromNumber)
+    .then((responseMessage) => {
+      const twiml = new MessagingResponse();
+      twiml.message(responseMessage);
+      res.writeHead(200, { "Content-Type": "text/xml" });
+      res.end(twiml.toString());
+    });
 });
+
+
+app.post("/sendAmrut", (req, res) => {
+    smsOutgoing.sendDailyAmrut();
+    res.status(200).send(`Amrut Text Sent`);
+  });
