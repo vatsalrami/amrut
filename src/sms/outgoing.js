@@ -26,7 +26,10 @@ function sendSms(to, body) {
 function sendDailyAmrut() {
   db.getAllPhoneNumbers().then((numbers) => {
     numbers.forEach((number) => {
-      sendSms(number, "What is todays Amrut?")
+      sendSms(
+        number,
+        "What is todays Amrut? \n\n Start your Amrut with '-' and end with ':)' Ex.  -message :) "
+      )
         .then((response) => {
           console.log(`Message sent to ${number}`);
         })

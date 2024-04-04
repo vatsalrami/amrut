@@ -4,6 +4,8 @@ const db = require("./database/database");
 const smsIncoming = require("./sms/incoming");
 const smsOutgoing = require("./sms/outgoing");
 const twilio = require("twilio");
+const cron = require("node-cron");
+const moment = require("moment-timezone");
 const app = express();
 const port = 3000;
 
@@ -12,12 +14,25 @@ app.use(express.json());
 app.use(express.static("src/frontend"));
 const MessagingResponse = twilio.twiml.MessagingResponse;
 
-//starts server on specified port
+/* starts server on specified port */
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
 
-//post endpoint for frontend signup
+/* cron job to send daily amrut */
+const estTime = "23:10";
+const utcTime = moment
+  .tz(`${estTime}`, "HH:mm", "America/New_York")
+  .utc()
+  .format("HH:mm");
+const [hour, minute] = utcTime.split(":");
+
+cron.schedule(`${minute} ${hour} * * *`, () => {
+  console.log("Sending Amrut @ 10PM EST");
+  smsOutgoing.sendDailyAmrut();
+});
+
+/* post endpoint for frontend signup */
 app.post("/submitPhoneNumber", (req, res) => {
   const { phoneNumber } = req.body;
   if (!phoneNumber) {
@@ -30,7 +45,7 @@ app.post("/submitPhoneNumber", (req, res) => {
   res.status(200).send(`Phone number ${phoneNumber} received and processed`);
 });
 
-//twilio webhook to handle incoming sms
+/* twilio webhook to handle incoming sms */
 app.post("/sms/webhook", (req, res) => {
   const messageBody = req.body.Body;
   const fromNumber = req.body.From;
@@ -47,8 +62,8 @@ app.post("/sms/webhook", (req, res) => {
     });
 });
 
-
-app.post("/sendAmrut", (req, res) => {
-    smsOutgoing.sendDailyAmrut();
-    res.status(200).send(`Amrut Text Sent`);
-  });
+// /* Endpoint to send Amrut Request*/
+// app.post("/sendAmrut", (req, res) => {
+//   smsOutgoing.sendDailyAmrut();
+//   res.status(200).send(`Amrut Text Sent`);
+// });
