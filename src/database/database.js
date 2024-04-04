@@ -1,22 +1,10 @@
 const db = require("./firebase.js");
 
 function createUser(firstName, phoneNumber) {
-  const userRef = db.collection("users");
-  return userRef.add({
+  const userRef = db.collection("users").doc(phoneNumber);
+  return userRef.set({
     firstName: firstName,
     phoneNumber: phoneNumber,
-  });
-}
-
-function getUser(userId) {
-  const userRef = db.collection("users").doc(userId);
-  return userRef.get().then((doc) => {
-    if (doc.exists) {
-      return doc.data();
-    } else {
-      console.log("No such User");
-      return null;
-    }
   });
 }
 
@@ -27,7 +15,7 @@ function getAllPhoneNumbers() {
     .then((snapshot) => {
       const numbers = [];
       snapshot.forEach((doc) => {
-        numbers.push(doc.data().phoneNumber);
+        numbers.push(doc.id);
       });
       return numbers;
     })
@@ -37,24 +25,30 @@ function getAllPhoneNumbers() {
     });
 }
 
-function updateNote(userId, noteId, updatedContent) {
+function createNote(phoneNumber, date, message) {
   const notesRef = db
     .collection("users")
-    .doc(userId)
+    .doc(phoneNumber)
     .collection("notes")
-    .doc(noteId);
-  return notesRef.set(updatedContent);
-}
+    .doc(date);
 
-function createNote(userId, date, message) {
-  const notesRef = db.collection("users").doc(userId).collection("notes");
-  return notesRef.add({
-    date: date,
-    message: message,
+  return notesRef.get().then((doc) => {
+    if (doc.exists) {
+      return updateNote(notesRef, doc.data().message + " " + message);
+    } else {
+      return notesRef.set({
+        date: date,
+        message: message,
+      });
+    }
   });
 }
 
-module.exports = { createUser, getAllPhoneNumbers };
+function updateNote(notesRef, updatedMsg) {
+  return notesRef.update({ message: updatedMsg });
+}
+
+module.exports = { createUser, getAllPhoneNumbers, createNote };
 
 // function updateUser(userId, updatedInfo) {
 //   const userRef = db.collection("users").doc(userId);

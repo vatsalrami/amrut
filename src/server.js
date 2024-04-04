@@ -62,8 +62,8 @@ app.post("/sms/webhook", (req, res) => {
     });
 });
 
-// /* Endpoint to send Amrut Request*/
-// app.post("/sendAmrut", (req, res) => {
-//   smsOutgoing.sendDailyAmrut();
-//   res.status(200).send(`Amrut Text Sent`);
-// });
+/* Endpoint to send Amrut Request*/
+app.post("/sendAmrut", (req, res) => {
+  smsOutgoing.sendDailyAmrut();
+  res.status(200).send(`Amrut Text Sent`);
+});

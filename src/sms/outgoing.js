@@ -28,7 +28,7 @@ function sendDailyAmrut() {
     numbers.forEach((number) => {
       sendSms(
         number,
-        "What is todays Amrut? \n\n Start your Amrut with '-' and end with ':)' Ex.  -message :) "
+        "What is todays Amrut? \n\n End your message with :)  "
       )
         .then((response) => {
           console.log(`Message sent to ${number}`);
