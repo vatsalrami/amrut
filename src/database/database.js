@@ -8,6 +8,13 @@ function createUser(firstName, phoneNumber) {
   });
 }
 
+function checkUserExists(phoneNumber) {
+  const userRef = db.collection("users").doc(phoneNumber).get();
+  if (phoneNumber.exists) {
+    return true;
+  } else {return false;}
+}
+
 function getAllPhoneNumbers() {
   return db
     .collection("users")
@@ -48,7 +55,7 @@ function updateNote(notesRef, updatedMsg) {
   return notesRef.update({ message: updatedMsg });
 }
 
-module.exports = { createUser, getAllPhoneNumbers, createNote };
+module.exports = { createUser, getAllPhoneNumbers, createNote, checkUserExists };
 
 // function updateUser(userId, updatedInfo) {
 //   const userRef = db.collection("users").doc(userId);
