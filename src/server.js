@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const bodyParser = require("body-parser");
 const db = require("./database/database");
 const smsIncoming = require("./sms/incoming");
@@ -7,8 +8,9 @@ const twilio = require("twilio");
 const cron = require("node-cron");
 const moment = require("moment-timezone");
 const app = express();
-const port = 3000;
 
+const corsOptions = { origin: "http://localhost:3000" };
+app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static("src/frontend"));
@@ -16,7 +18,7 @@ const MessagingResponse = twilio.twiml.MessagingResponse;
 
 /* starts server on specified port */
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+  console.log(`Server running on http://localhost:3000`);
 });
 
 /* cron job to send daily amrut */
@@ -38,11 +40,15 @@ app.post("/submitPhoneNumber", (req, res) => {
   if (!phoneNumber) {
     res.status(400).send("Phone number is required.");
   }
-  smsOutgoing.sendSms(
-    phoneNumber,
-    "Welcome to Amrut.\n\n To finish signing up, please reply with '@' followed by your first name. Ex. (@Vatsal)"
-  );
-  res.status(200).send(`Phone number ${phoneNumber} received and processed`);
+  if (db.checkUserExists(phoneNumber)) {
+    res.status(400).send("Phone number already exists");
+  } else {
+    smsOutgoing.sendSms(
+      phoneNumber,
+      "Welcome to Amrut.\n\n To finish signing up, please reply with '@' followed by your first name. Ex. (@Vatsal)"
+    );
+    res.status(200).send(`Phone number ${phoneNumber} received and processed`);
+  }
 });
 
 /* twilio webhook to handle incoming sms */
