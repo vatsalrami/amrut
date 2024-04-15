@@ -26,10 +26,7 @@ function sendSms(to, body) {
 function sendDailyAmrut() {
   db.getAllPhoneNumbers().then((numbers) => {
     numbers.forEach((number) => {
-      sendSms(
-        number,
-        "What is todays Amrut? \n\n End your message with :)  "
-      )
+      sendSms(number, "What is todays Amrut? \n\n End your message with :)  ")
         .then((response) => {
           console.log(`Message sent to ${number}`);
         })

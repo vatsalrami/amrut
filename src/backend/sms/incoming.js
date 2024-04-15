@@ -3,12 +3,16 @@ const db = require("../database/database");
 function processIncomingSms(messageBody, fromNumber) {
   messageBody = messageBody.trim();
 
-  if (messageBody.startsWith("@")) {
+  if (messageBody.startsWith("@Help") || messageBody.startsWith("@help")) {
+    return help(messageBody, fromNumber);
+  } else if (messageBody.startsWith("@")) {
     return signupName(messageBody, fromNumber);
   } else if (messageBody.endsWith(":)")) {
     return logAmrut(messageBody, fromNumber);
   } else {
-    return Promise.resolve("Message received but no action taken.");
+    return Promise.resolve(
+      "Hmm I don't understand... Text @Help for assistance."
+    );
   }
 }
 
@@ -39,6 +43,11 @@ function logAmrut(messageBody, fromNumber) {
       console.error(error);
       reject("Failed to log Amrut.");
     });
+}
+
+function help(messageBody, fromNumber) {
+  helpText =
+    "Make sure to end your daily amrut with ':)' to save the entry. \n\n For additional assistance, text 571-206-2288.";
 }
 
 module.exports = { processIncomingSms };

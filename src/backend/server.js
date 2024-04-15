@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 const bodyParser = require("body-parser");
 const db = require("./database/database");
 const smsIncoming = require("./sms/incoming");
@@ -13,12 +14,17 @@ const corsOptions = { origin: "http://localhost:3000" };
 app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(express.static("src/frontend"));
+app.use(express.static(path.join(__dirname, "..", "frontend")));
 const MessagingResponse = twilio.twiml.MessagingResponse;
 
 /* starts server on specified port */
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server running on http://localhost:3000`);
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "frontend", "index.html"));
 });
 
 /* cron job to send daily amrut */
