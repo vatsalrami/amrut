@@ -4,7 +4,7 @@ function processIncomingSms(messageBody, fromNumber) {
   messageBody = messageBody.trim();
 
   if (messageBody.startsWith("@Help") || messageBody.startsWith("@help")) {
-    return help(messageBody, fromNumber);
+    return help();
   } else if (messageBody.startsWith("@")) {
     return signupName(messageBody, fromNumber);
   } else if (messageBody.endsWith(":)")) {
@@ -45,9 +45,11 @@ function logAmrut(messageBody, fromNumber) {
     });
 }
 
-function help(messageBody, fromNumber) {
-  helpText =
+function help() {
+  const helpText =
     "Make sure to end your daily amrut with ':)' to save the entry. \n\n For additional assistance, text 571-206-2288.";
+
+  return Promise.resolve(helpText);
 }
 
 module.exports = { processIncomingSms };
