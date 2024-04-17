@@ -10,9 +10,11 @@ function createUser(firstName, phoneNumber) {
 
 function checkUserExists(phoneNumber) {
   const userRef = db.collection("users").doc(phoneNumber).get();
-  if (phoneNumber.exists) {
+  if (phoneNumber == null) {
+    return false;
+  } else {
     return true;
-  } else {return false;}
+  }
 }
 
 function getAllPhoneNumbers() {
@@ -55,7 +57,12 @@ function updateNote(notesRef, updatedMsg) {
   return notesRef.update({ message: updatedMsg });
 }
 
-module.exports = { createUser, getAllPhoneNumbers, createNote, checkUserExists };
+module.exports = {
+  createUser,
+  getAllPhoneNumbers,
+  createNote,
+  checkUserExists,
+};
 
 // function updateUser(userId, updatedInfo) {
 //   const userRef = db.collection("users").doc(userId);
