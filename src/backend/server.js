@@ -57,21 +57,35 @@ app.post("/submitPhoneNumber", (req, res) => {
   }
 });
 
-/* twilio webhook to handle incoming sms */
 app.post("/sms/webhook", (req, res) => {
   const messageBody = req.body.Body;
   const fromNumber = req.body.From;
 
-  console.log(`Incoming message from ${fromNumber}: ${messageBody}`);
+  //validate request is from twilio
+  const signature = req.headers["x-twilio-signature"];
+  const url = "https://" + req.headers.host + req.originalUrl;
+  const params = req.body;
+  if (
+    twilio.validateRequest(
+      process.env.TWILIO_AUTH_TOKEN,
+      signature,
+      url,
+      params
+    )
+  ) {
+    console.log(`Incoming message from ${fromNumber}: ${messageBody}`);
 
-  smsIncoming
-    .processIncomingSms(messageBody, fromNumber)
-    .then((responseMessage) => {
-      const twiml = new MessagingResponse();
-      twiml.message(responseMessage);
-      res.writeHead(200, { "Content-Type": "text/xml" });
-      res.end(twiml.toString());
-    });
+    smsIncoming
+      .processIncomingSms(messageBody, fromNumber)
+      .then((responseMessage) => {
+        const twiml = new MessagingResponse();
+        twiml.message(responseMessage);
+        res.writeHead(200, { "Content-Type": "text/xml" });
+        res.end(twiml.toString());
+      });
+  } else {
+    res.status(403).send("Forbidden");
+  }
 });
 
 /* Endpoint to send Amrut Request*/
