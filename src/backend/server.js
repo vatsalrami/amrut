@@ -1,5 +1,4 @@
 const express = require("express");
-const cors = require("cors");
 const path = require("path");
 const bodyParser = require("body-parser");
 const db = require("./database/database");
@@ -10,12 +9,33 @@ const cron = require("node-cron");
 const moment = require("moment-timezone");
 const app = express();
 
-const corsOptions = { origin: "http://localhost:3000" };
-app.use(cors(corsOptions));
+/* middleware */
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "..", "frontend")));
-const MessagingResponse = twilio.twiml.MessagingResponse;
+app.use((req, res, next) => {
+  const apiKey = req.get("x-api-key");
+  const twilioSignature = req.headers["x-twilio-signature"];
+
+  if (twilioSignature) {
+    validTwilio = twilio.validateRequest(
+      process.env.TWILIO_AUTH_TOKEN,
+      twilioSignature,
+      "https://" + req.headers.host + req.originalUrl,
+      req.body
+    );
+    if (validTwilio) {
+      return next();
+    }
+  }
+
+  if (apiKey === process.env.API_KEY) {
+    return next();
+  }
+
+  res.status(401).json({ error: "Invalid API key" });
+  return;
+});
 
 /* starts server on specified port */
 const port = process.env.PORT || 3000;
@@ -23,6 +43,7 @@ app.listen(port, () => {
   console.log(`Server running on http://localhost:3000`);
 });
 
+/* all endpoints lead to index.html */
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "frontend", "index.html"));
 });
@@ -56,6 +77,9 @@ app.post("/submitPhoneNumber", (req, res) => {
     res.status(200).send(`Phone number ${phoneNumber} received and processed`);
   }
 });
+
+/* twilio webhook to handle incoming sms */
+const MessagingResponse = twilio.twiml.MessagingResponse;
 
 app.post("/sms/webhook", (req, res) => {
   const messageBody = req.body.Body;
