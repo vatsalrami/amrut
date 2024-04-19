@@ -4,3 +4,9 @@ ngrok http 3000
 put ngrok link as twilio webhook
 
 http://localhost:3000
+
+Technology Leveraged:
+    Twilio - Send/Recieve SMS
+    Firebase (Firestore) - Database
+    Heroku - Deployment
+    Namecheap - Domain Registration
