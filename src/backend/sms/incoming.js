@@ -1,17 +1,24 @@
 const db = require("../database/database");
 
-function processIncomingSms(messageBody, fromNumber) {
+async function processIncomingSms(messageBody, fromNumber) {
   messageBody = messageBody.trim();
 
-  if (messageBody.startsWith("@Help") || messageBody.startsWith("@help")) {
-    return help();
-  } else if (messageBody.startsWith("@")) {
-    return signupName(messageBody, fromNumber);
-  } else if (messageBody.endsWith(":)")) {
-    return logAmrut(messageBody, fromNumber);
+  if (await db.checkUserExists(fromNumber)) {
+    if (messageBody.startsWith("@Help") || messageBody.startsWith("@help")) {
+      return help();
+    } else if (messageBody.endsWith(":)")) {
+      return logAmrut(messageBody, fromNumber);
+    } else {
+      return Promise.resolve(
+        "Hmm I don't understand... Text @Help for assistance."
+      );
+    }
   } else {
+    if (messageBody.startsWith("@")) {
+      return signupName(messageBody, fromNumber);
+    }
     return Promise.resolve(
-      "Hmm I don't understand... Text @Help for assistance."
+      "To finish signing up, please reply with '@' followed by your first name. Ex. (@Vatsal)"
     );
   }
 }

@@ -41,19 +41,29 @@ cron.schedule(`${minute} ${hour} * * *`, () => {
 });
 
 /* post endpoint for frontend signup */
-app.post("/submitPhoneNumber", (req, res) => {
+app.post("/submitPhoneNumber", async (req, res) => {
   const { phoneNumber } = req.body;
+
   if (!phoneNumber) {
-    res.status(400).send("Phone number is required.");
+    return res.status(400).send("Phone number is required.");
   }
-  if (db.checkUserExists(phoneNumber)) {
-    res.status(400).send("Phone number already exists");
-  } else {
-    smsOutgoing.sendSms(
-      phoneNumber,
-      "Welcome to Amrut.\n\n To finish signing up, please reply with '@' followed by your first name. Ex. (@Vatsal)"
-    );
-    res.status(200).send(`Phone number ${phoneNumber} received and processed`);
+
+  try {
+    const userExists = await db.checkUserExists(phoneNumber);
+    if (userExists) {
+      return res.status(400).send("Phone number already exists");
+    } else {
+      smsOutgoing.sendSms(
+        phoneNumber,
+        "Welcome to Amrut.\n\n To finish signing up, please reply with '@' followed by your first name. Ex. (@Vatsal)"
+      );
+      return res
+        .status(200)
+        .send(`Phone number ${phoneNumber} received and processed`);
+    }
+  } catch (error) {
+    console.error("Error checking user existence:", error);
+    return res.status(500).send("Error processing your request");
   }
 });
 
