@@ -1,0 +1,258 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  font-family: Jacques Francois;
+  scroll-behavior: smooth;
+  max-width: 100vw;
+  box-sizing: border-box;
+}
+
+/* Nav Section Styles */
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 500;
+}
+
+.sticky-bg {
+  width: 100%;
+  backdrop-filter: blur(20px);
+}
+
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 11;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: space-between;
+  padding: 2% 3%;
+}
+
+.nav-links ul li {
+  list-style: none;
+  display: inline-block;
+  padding-right: 50px;
+}
+
+.nav-links ul li a {
+  text-decoration: none;
+  color: #f2ebeb;
+  transition: 0.5s;
+}
+
+.nav-links ul li a:hover {
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+}
+
+/* Landing Section Styles */
+#landing-section {
+  min-height: 100vh;
+  max-width: 100vw;
+  background-color: #ffc877;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#title {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 8px;
+  font-size: 150px;
+  color: white;
+  font-weight: 100;
+  margin-right: -30px;
+  position: relative;
+  transition: 0.7s;
+  z-index: 15;
+  width: 100%;
+}
+
+#hindi {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 35px;
+  font-family: krutidev;
+}
+
+/* quote section two styles */
+#section-two {
+  max-width: 100vw;
+  min-height: 10vh;
+  background: #604023;
+  color: #fce2bb;
+  letter-spacing: 2px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quote-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#quote {
+  font-size: 20px;
+  letter-spacing: 2px;
+  font-weight: 300;
+  text-align: center;
+}
+
+/* definition section three styles */
+#section-three {
+  max-width: 100vw;
+  min-height: 35vh;
+  background: #fce2bb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #604023;
+  overflow: hidden;
+}
+
+.definition-container {
+  padding-top: 100px;
+  /* width: 50%; */
+  /* height: 50%; */
+  display: flex;
+}
+
+.definition-small-container {
+  border: solid;
+  border-radius: 15px;
+  padding: 2vh 6vh 3vw 4vw;
+  /* width: 100%; */
+  /* height: 100%; */
+}
+
+#word {
+  font-size: 350%;
+  padding-right: 10px;
+  letter-spacing: 2px;
+  font-weight: 300;
+}
+
+#noun {
+  font-size: 120%;
+}
+
+#definition {
+  font-size: 120%;
+  font-weight: 200;
+  padding-left: 35px;
+}
+
+/*steps section four styles*/
+#section-four {
+  max-width: 100vw;
+  min-height: 30vh;
+  background: #fce2bb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #604023;
+  overflow: hidden;
+}
+
+.steps {
+  font-size: 125%;
+  list-style-type: none;
+}
+
+h2 {
+  padding: 20px;
+  text-align: center;
+}
+
+.steps li {
+  padding: 15px;
+  text-align: center;
+  display: inline;
+}
+
+@media (max-width: 700px) {
+  .steps li {
+    display: block;
+  }
+}
+
+/* join section five styles*/
+#section-five {
+  max-width: 100vw;
+  min-height: 15vh;
+  background: #fce2bb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #604023;
+  overflow: hidden;
+  
+}
+
+.join-container {
+  display: flex; /* Aligns the input and button inline */
+  background-color: #fff; /* Light background for the form */
+  border-radius: 20px; /* Rounded corners for the form */
+  width: fit-content; /* Auto-size to fit the content */
+}
+
+#phoneNumber {
+  border: none;
+  outline: none;
+  border-radius: 20px 0 0 20px;
+  padding: 10px;
+  margin-right: -1px;
+  margin-left: 10px;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+}
+
+.join-button {
+  background-color: rgb(166, 124, 82);
+  color: rgb(255, 255, 255);
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: 0px 20px 20px 0px;
+  padding: 16px 20px;
+  transition: background-color 0.3s ease 0s;
+}
+
+.join-button:hover {
+  background-color: #8b6f47; /* Darker shade on hover for the button */
+}
+
+/* contact section six styles */
+#section-six {
+  max-width: 100vw;
+  min-height: 10vh;
+  background: #fce2bb;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  color: rgba(161, 161, 161, 0.601);
+  overflow: hidden;
+}
+
+.footer{
+  padding-bottom: 20px;
+}
+
