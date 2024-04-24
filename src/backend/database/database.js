@@ -9,12 +9,16 @@ function createUser(firstName, phoneNumber) {
 }
 
 function checkUserExists(phoneNumber) {
-  const userRef = db.collection("users").doc(phoneNumber).get();
-  if (phoneNumber == null) {
-    return false;
-  } else {
-    return true;
-  }
+  return db
+    .collection("users")
+    .doc(phoneNumber)
+    .get()
+    .then((snapshot) => {
+      if (snapshot.exists) {
+        return true;
+      }
+      return false;
+    });
 }
 
 function getAllPhoneNumbers() {
