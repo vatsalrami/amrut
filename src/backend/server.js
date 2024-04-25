@@ -28,7 +28,7 @@ app.get("*", (req, res) => {
 });
 
 /* cron job to send daily amrut */
-const estTime = "23:10";
+const estTime = "22:00";
 const utcTime = moment
   .tz(`${estTime}`, "HH:mm", "America/New_York")
   .utc()
