@@ -1,4 +1,6 @@
 const db = require("../database/database");
+const constants = require("../constants.js");
+const moment = require("moment-timezone");
 
 async function processIncomingSms(messageBody, fromNumber) {
   messageBody = messageBody.trim();
@@ -37,9 +39,16 @@ function signupName(messageBody, fromNumber) {
 }
 
 function logAmrut(messageBody, fromNumber) {
-  const currentDateTime = new Date();
-  const dateString = currentDateTime.toISOString().split("T")[0];
-  messageBody = messageBody.substring(0, messageBody.length - 2);
+  const currentDateTimeEST = moment.tz(moment(), "America/New_York");
+  const cutOff = constants.sendAmrutTime.substring(0, 2);
+
+  if (currentDateTimeEST.hour() < cutOff) {
+    currentDateTimeEST.subtract(1, "days");
+  }
+
+  const dateString = currentDateTimeEST.format("MM-DD-YYYY");
+
+  messageBody = messageBody.substring(0, messageBody.length - 2).trim();
 
   return db
     .createNote(fromNumber, dateString, messageBody)

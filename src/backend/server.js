@@ -8,6 +8,7 @@ const smsOutgoing = require("./sms/outgoing");
 const twilio = require("twilio");
 const cron = require("node-cron");
 const moment = require("moment-timezone");
+const constants = require('./constants.js');
 const app = express();
 
 const corsOptions = { origin: "http://localhost:3000" };
@@ -28,7 +29,7 @@ app.get("*", (req, res) => {
 });
 
 /* cron job to send daily amrut */
-const estTime = "22:00";
+const estTime = constants.sendAmrutTime;
 const utcTime = moment
   .tz(`${estTime}`, "HH:mm", "America/New_York")
   .utc()
