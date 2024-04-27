@@ -8,6 +8,15 @@ function createUser(firstName, phoneNumber) {
   });
 }
 
+function getUser(phoneNumber) {
+  try {
+    return db.collection("users").doc(phoneNumber).get();
+  } catch (error) {
+    console.error("Error getting user: ", error);
+    return Promise.reject(error);
+  }
+}
+
 function checkUserExists(phoneNumber) {
   return db
     .collection("users")
@@ -66,6 +75,7 @@ module.exports = {
   getAllPhoneNumbers,
   createNote,
   checkUserExists,
+  getUser,
 };
 
 // function updateUser(userId, updatedInfo) {

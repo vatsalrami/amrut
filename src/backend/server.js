@@ -56,7 +56,7 @@ app.post("/submitPhoneNumber", async (req, res) => {
     } else {
       smsOutgoing.sendSms(
         phoneNumber,
-        "Welcome to Amrut.\n\n To finish signing up, please reply with '@' followed by your first name. Ex. (@Vatsal)"
+        "Amrut\n\nTo finish signing up, please reply with '@' followed by your first name (Ex. @Vatsal)"
       );
       return res
         .status(200)

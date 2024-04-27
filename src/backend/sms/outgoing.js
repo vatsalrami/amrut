@@ -26,7 +26,7 @@ function sendSms(to, body) {
 function sendDailyAmrut() {
   db.getAllPhoneNumbers().then((numbers) => {
     numbers.forEach((number) => {
-      sendSms(number, "What is todays Amrut? \n\n End your message with :)  ")
+      sendSms(number, "What is todays Amrut?\n\nEnd your message with :)")
         .then((response) => {
           console.log(`Message sent to ${number}`);
         })
@@ -37,4 +37,26 @@ function sendDailyAmrut() {
   });
 }
 
-module.exports = { sendSms, sendDailyAmrut };
+function help() {
+  const helpText =
+    "Make sure to end your daily amrut with ':)' to save the entry.\n\nFor additional assistance, text 571-206-2288.";
+
+  return Promise.resolve(helpText);
+}
+
+function signupName(messageBody, fromNumber) {
+  const name = messageBody.substring(1).trim();
+  return db
+    .createUser(name, fromNumber)
+    .then(() => {
+      sendSms(fromNumber, "Welcome to Amrut!");
+      sendSms(fromNumber, "Start off by adding me to your contacts.\n\nEveryday at 10pm, I will ask for that days Amrut. Simply reply and begin your journey of seeking Amrut :)\n\nFor more help, text '@help'.");
+      return '';
+    })
+    .catch((error) => {
+      console.error(error);
+      reject("Failed to signup.");
+    });
+}
+
+module.exports = { sendSms, sendDailyAmrut, help, signupName};

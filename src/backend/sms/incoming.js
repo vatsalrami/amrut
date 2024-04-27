@@ -1,13 +1,15 @@
 const db = require("../database/database");
 const constants = require("../constants.js");
 const moment = require("moment-timezone");
+const smsOutgoing = require("./outgoing");
+
 
 async function processIncomingSms(messageBody, fromNumber) {
   messageBody = messageBody.trim();
 
   if (await db.checkUserExists(fromNumber)) {
     if (messageBody.startsWith("@Help") || messageBody.startsWith("@help")) {
-      return help();
+      return smsOutgoing.help();
     } else if (messageBody.endsWith(":)")) {
       return logAmrut(messageBody, fromNumber);
     } else {
@@ -17,25 +19,12 @@ async function processIncomingSms(messageBody, fromNumber) {
     }
   } else {
     if (messageBody.startsWith("@")) {
-      return signupName(messageBody, fromNumber);
+      return smsOutgoing.signupName(messageBody,fromNumber);
     }
     return Promise.resolve(
-      "To finish signing up, please reply with '@' followed by your first name. Ex. (@Vatsal)"
+      "To finish signing up, please reply with '@' followed by your first name (Ex. @Vatsal)"
     );
   }
-}
-
-function signupName(messageBody, fromNumber) {
-  const name = messageBody.substring(1).trim();
-  return db
-    .createUser(name, fromNumber)
-    .then(() => {
-      return `Thank you, ${name}. Signup Successful!`;
-    })
-    .catch((error) => {
-      console.error(error);
-      reject("Failed to signup.");
-    });
 }
 
 function logAmrut(messageBody, fromNumber) {
@@ -59,13 +48,6 @@ function logAmrut(messageBody, fromNumber) {
       console.error(error);
       reject("Failed to log Amrut.");
     });
-}
-
-function help() {
-  const helpText =
-    "Make sure to end your daily amrut with ':)' to save the entry. \n\n For additional assistance, text 571-206-2288.";
-
-  return Promise.resolve(helpText);
 }
 
 module.exports = { processIncomingSms };
