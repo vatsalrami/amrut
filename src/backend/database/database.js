@@ -70,12 +70,18 @@ function updateNote(notesRef, updatedMsg) {
   return notesRef.update({ message: updatedMsg });
 }
 
+function deleteUser(phoneNumber) {
+  const userRef = db.collection("users").doc(phoneNumber);
+  return userRef.delete();
+}
+
 module.exports = {
   createUser,
   getAllPhoneNumbers,
   createNote,
   checkUserExists,
   getUser,
+  deleteUser,
 };
 
 // function updateUser(userId, updatedInfo) {
@@ -83,10 +89,7 @@ module.exports = {
 //   return userRef.set(updatedInfo);
 // }
 
-// function deleteUser(userId) {
-//   const userRef = db.collection("users").doc(userId);
-//   return userRef.delete();
-// }
+
 
 // function getNote(userId, date){
 //     const notesRef = db.collection('users').doc(userId).collection('notes');

@@ -3,13 +3,22 @@ const constants = require("../constants.js");
 const moment = require("moment-timezone");
 const smsOutgoing = require("./outgoing");
 
-
 async function processIncomingSms(messageBody, fromNumber) {
   messageBody = messageBody.trim();
 
   if (await db.checkUserExists(fromNumber)) {
     if (messageBody.startsWith("@Help") || messageBody.startsWith("@help")) {
       return smsOutgoing.help();
+    } else if (messageBody == "@stop" || messageBody == "@Stop") {
+      try {
+        db.deleteUser(fromNumber);
+        return Promise.resolve("Account successfully deactivated.");
+      } catch (error) {
+        console.error("Error deleting user:", error);
+        return Promise.resolve(
+          "Account could not be deactivated, please contact 571-206-2288"
+        );
+      }
     } else if (messageBody.endsWith(":)")) {
       return logAmrut(messageBody, fromNumber);
     } else {
@@ -19,7 +28,7 @@ async function processIncomingSms(messageBody, fromNumber) {
     }
   } else {
     if (messageBody.startsWith("@")) {
-      return smsOutgoing.signupName(messageBody,fromNumber);
+      return smsOutgoing.signupName(messageBody, fromNumber);
     }
     return Promise.resolve(
       "To finish signing up, please reply with '@' followed by your first name (Ex. @Vatsal)"
