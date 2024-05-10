@@ -1,10 +1,3 @@
-node src/server.js
-
-ngrok http 3000
-put ngrok link as twilio webhook
-
-http://localhost:3000
-
 # Amrut
 
 Amrut is a daily reflection app designed to encourage users to reflect on gratitude. The app sends a daily text message prompt to users, who can respond with their reflections. These responses are then stored in their personal profile, accessible via the text interface.
@@ -30,6 +23,7 @@ Amrut is a daily reflection app designed to encourage users to reflect on gratit
 - Node.js installed on your machine.
 - A Twilio account for handling SMS services.
 - Firebase project setup for authentication and database.
+- Ngrok setup for secure tunnel to localhost
 
 ### Installation
 
@@ -47,14 +41,17 @@ Amrut is a daily reflection app designed to encourage users to reflect on gratit
         ```FIREBASE_API_KEY=your_firebase_api_key
         TWILIO_ACCOUNT_SID=your_twilio_account_sid
         TWILIO_AUTH_TOKEN=your_twilio_auth_token```
+
 4. Run the application:
         ```npm start
     This will start the server locally on http://localhost:3000.
 
+5. Run ngrok and paste updated webhook url in Twilio
+
 ### Usage
     Sign up/Log in: First, users need to sign up or log in through the web interface.
     Receive and Respond to Prompts: Users will receive a daily text message and can respond directly via SMS.
-    View Reflections: Users can view their past reflections on the web interface.
+    View Reflections: Users can view their past reflections on the text interface.
 
 ### Contributing
 
