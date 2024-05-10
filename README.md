@@ -72,7 +72,7 @@ cd amrut
 npm install
 ```
 
-3. Set up environment variables:
+3. **Set up environment variables:**
 
 Create a .env file in the root directory and update it with your Firebase and Twilio credentials:
 
