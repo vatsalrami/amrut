@@ -37,6 +37,20 @@ function sendDailyAmrut() {
   });
 }
 
+function sendAll(message){
+  db.getAllPhoneNumbers().then((numbers) => {
+    numbers.forEach((number) => {
+      sendSms(number, message)
+        .then((response) => {
+          console.log(`Message sent to ${number}`);
+        })
+        .catch((error) => {
+          console.error(`Failed to send message to ${number}:`, error);
+        });
+    });
+  });
+}
+
 function help() {
   const helpText =
     "Make sure to end your daily amrut with ':)' to save the entry.\n\nTo stop recieving texts, reply @stop\n\nFor additional assistance, text 571-206-2288.";
@@ -60,4 +74,4 @@ function signupName(messageBody, fromNumber) {
     });
 }
 
-module.exports = { sendSms, sendDailyAmrut, help, signupName};
+module.exports = { sendSms, sendDailyAmrut, help, signupName, sendAll};
